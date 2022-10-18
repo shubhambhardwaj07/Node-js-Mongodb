@@ -7,8 +7,8 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 
 const errorController = require("./controllers/error");
-const User = require("./models/user");
 
+const User = require("./models/user");
 const MONGODB_URI =
   "mongodb+srv://shubham-node:Shubham%40123@cluster0.mnmqbyh.mongodb.net/shop?retryWrites=true&w=majority";
 
@@ -55,21 +55,10 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 mongoose
-  .connect(MONGODB_URI)
+  .connect(MONGODB_URI, { useNewUrlParser: true })
   .then((result) => {
-    User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({
-          name: "Max",
-          email: "max@test.com",
-          cart: {
-            items: [],
-          },
-        });
-        user.save();
-      }
-    });
     app.listen(3000);
+    console.log("connected with mongooseee");
   })
   .catch((err) => {
     console.log(err);
