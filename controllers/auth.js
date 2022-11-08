@@ -1,5 +1,16 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key:
+        "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",
+    },
+  })
+);
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
@@ -86,7 +97,14 @@ exports.postSignup = (req, res, next) => {
         })
         .then((result) => {
           res.redirect("/login");
-        });
+          return transporter.sendMail({
+            to: email,
+            from: "shubham998845@gmail.com",
+            subject: "signup succeded",
+            html: "<h1>You successfully Signed Up with Shubh Shopify</h1>",
+          });
+        })
+        .catch((err) => console.log(err));
     })
 
     .catch((err) => console.log(err));
@@ -96,5 +114,19 @@ exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
     res.redirect("/");
+  });
+};
+
+exports.getReset = (req, res, next) => {
+  let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+  res.render("auth/reset", {
+    path: "/reset",
+    pageTitle: "Reset Password",
+    errorMessage: message,
   });
 };
