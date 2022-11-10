@@ -150,7 +150,9 @@ form {
   color: #ffeb3b;
   border-color: #ffeb3b;
 }
-
+.card__image img {
+  height: 160px;
+}
 .backdrop {
   position: fixed;
   top: 0;
