@@ -12,10 +12,14 @@ router.get("/signup", authController.getSignup);
 router.post(
   "/login",
   [
-    body("email").isEmail().withMessage("Please enter a valid email address"),
+    body("email")
+      .isEmail()
+      .withMessage("Please enter a valid email address")
+      .normalizeEmail(),
     body("password", "Please have alphanumeric password")
       .isLength({ min: 5 })
-      .isAlphanumeric(),
+      .isAlphanumeric()
+      .trim(),
   ],
   authController.postLogin
 );
@@ -25,6 +29,7 @@ router.post(
   [
     check("email")
       .isEmail()
+
       .withMessage("Please enter a valid email")
       .custom((value, { req }) => {
         return User.findOne({ email: value }).then((userDoc) => {
@@ -35,10 +40,12 @@ router.post(
             );
           }
         });
-      }),
+      })
+      .normalizeEmail(),
     body("password", "Please enter alphanumeric with min 5 characters")
       .isLength({ min: 5 })
-      .isAlphanumeric(),
+      .isAlphanumeric()
+      .trim(),
     body("confirmPassword").custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error("Passwords have to match");
