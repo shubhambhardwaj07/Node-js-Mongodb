@@ -75,7 +75,7 @@ exports.postLogin = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
@@ -85,39 +85,25 @@ exports.postSignup = (req, res, next) => {
       errorMessage: errors.array()[0].msg,
     });
   }
-  //validation here
-  User.findOne({ email: email })
-    .then((userDoc) => {
-      if (userDoc) {
-        //show message signup worked
-        req.flash(
-          "error",
-          "Email exists already, please pick a different email"
-        );
-        return res.redirect("/signup");
-      }
-      return bcrypt
-        .hash(password, 12)
-        .then((hashedPassword) => {
-          const user = new User({
-            email: email,
-            password: hashedPassword,
-            cart: { items: [] },
-          });
-          return user.save();
-        })
-        .then((result) => {
-          res.redirect("/login");
-          return transporter.sendMail({
-            to: email,
-            from: "shubham998845@gmail.com",
-            subject: "signup succeded",
-            html: "<h1>You successfully Signed Up with Shubh Shopify</h1>",
-          });
-        })
-        .catch((err) => console.log(err));
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const user = new User({
+        email: email,
+        password: hashedPassword,
+        cart: { items: [] },
+      });
+      return user.save();
     })
-
+    .then((result) => {
+      res.redirect("/login");
+      return transporter.sendMail({
+        to: email,
+        from: "shubham998845@gmail.com",
+        subject: "signup succeded",
+        html: "<h1>You successfully Signed Up with Shubh Shopify</h1>",
+      });
+    })
     .catch((err) => console.log(err));
 };
 
