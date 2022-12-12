@@ -27,7 +27,7 @@ const fileStorage = multer.diskStorage({
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(nul, new Date().toISOString() + "-" + file.originalname);
+    cb(null, new Date().getTime() + "-" + file.originalname);
   },
 });
 
@@ -56,6 +56,8 @@ app.use(
 ); //which field to be handled by multer
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
+
 app.use(
   session({
     secret: "my secret",
