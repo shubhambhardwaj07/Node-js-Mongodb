@@ -35,6 +35,7 @@
                             </article>
                             <% } %>
                     </div>
+                    <%- include('../includes/add-to-cart.ejs', {currentPage: currentPage,nextPage:nextPage,previousPage:previousPage,hasNextPage:hasNextPage,hasPreviousPage:hasPreviousPage,lastPage:lastPage}) %>
                     <% } else { %>
                         <h1>No Products Found!</h1>
                         <% } %>
