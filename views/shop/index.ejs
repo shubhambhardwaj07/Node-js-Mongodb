@@ -24,13 +24,13 @@
                         <div class="card__actions">
                             <a href="/products/<%= product._id %>" class="btn">Details</a>
                             <% if (isAuthenticated) { %>
-                                <%- include('../includes/add-to-cart.ejs', {currentPage: currentPage,nextPage:nextPage,previousPage:previousPage,hasNextPage:hasNextPage,hasPreviousPage:hasPreviousPage,lastPage:lastPage}) %>
+                                <%- include('../includes/add-to-cart.ejs', {product: product}) %>
                             <% } %>
                         </div>
                     </article>
                 <% } %>
             </div>
-            <%- include('../includes/pagination.ejs', {product: product}) %>
+            <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
         <% } else { %>
             <h1>No Products Found!</h1>
         <% } %>
